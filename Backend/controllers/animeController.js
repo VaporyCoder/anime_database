@@ -1,73 +1,130 @@
+const mongoose = require('mongoose');
 const Anime = require('../models/Anime');
 
 // Get all anime
-exports.getAllAnime = async (req, res) => {
+const getAllAnime = async (req, res) => {
   try {
-    const anime = await Anime.find();
-    res.json(anime);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    const animeList = await Anime.find();
+    res.status(200).json(animeList);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching anime', error });
   }
 };
 
-// Get a single anime by ID
-exports.getAnimeById = async (req, res) => {
+// Get anime by ID
+const getAnimeById = async (req, res) => {
   try {
-    const anime = await Anime.findById(req.params.id);
+    const { id } = req.params;
+
+    // Check if the ID is a valid ObjectId
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ message: 'Invalid anime ID' });
+    }
+
+    const anime = await Anime.findById(id);
     if (!anime) {
       return res.status(404).json({ message: 'Anime not found' });
     }
-    res.json(anime);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(200).json(anime);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching anime', error });
   }
 };
 
 // Add a new anime
-exports.addAnime = async (req, res) => {
-  const anime = new Anime({
-    title: req.body.title,
-    description: req.body.description,
-    episodes: req.body.episodes,
-    genre: req.body.genre,
-    image: req.body.image,
-  });
-
+const addAnime = async (req, res) => {
   try {
-    const newAnime = await anime.save();
+    const { mal_id, title, title_english, description, episodes, genre, rating, image, status, aired } = req.body;
+
+    // Check if anime already exists (by mal_id)
+    const existingAnime = await Anime.findOne({ mal_id });
+    if (existingAnime) {
+      return res.status(400).json({ message: 'Anime already exists' });
+    }
+
+    const newAnime = new Anime({
+      mal_id,
+      title,
+      title_english,
+      description,
+      episodes,
+      genre,
+      rating,
+      image,
+      status,
+      aired,
+    });
+
+    await newAnime.save();
     res.status(201).json(newAnime);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding anime', error });
   }
 };
 
 // Update an anime
-exports.updateAnime = async (req, res) => {
-  const { id } = req.params; // Get the anime ID from the URL
-  const updates = req.body; // Get the updates from the request body
-
+const updateAnime = async (req, res) => {
   try {
-    const updatedAnime = await Anime.findByIdAndUpdate(id, updates, { new: true });
+    const { id } = req.params;
+
+    // Check if the ID is a valid ObjectId
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ message: 'Invalid anime ID' });
+    }
+
+    const { title, title_english, description, episodes, genre, rating, image, status, aired } = req.body;
+
+    const updatedAnime = await Anime.findByIdAndUpdate(
+      id,
+      {
+        title,
+        title_english,
+        description,
+        episodes,
+        genre,
+        rating,
+        image,
+        status,
+        aired,
+        updated_at: Date.now(), // Update the timestamp
+      },
+      { new: true } // Return the updated document
+    );
+
     if (!updatedAnime) {
       return res.status(404).json({ message: 'Anime not found' });
     }
-    res.json(updatedAnime);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+
+    res.status(200).json(updatedAnime);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating anime', error });
   }
 };
 
 // Delete an anime
-exports.deleteAnime = async (req, res) => {
-  const { id } = req.params; // Get the anime ID from the URL
-
+const deleteAnime = async (req, res) => {
   try {
+    const { id } = req.params;
+
+    // Check if the ID is a valid ObjectId
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ message: 'Invalid anime ID' });
+    }
+
     const deletedAnime = await Anime.findByIdAndDelete(id);
     if (!deletedAnime) {
       return res.status(404).json({ message: 'Anime not found' });
     }
-    res.json({ message: 'Anime deleted successfully' });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(200).json({ message: 'Anime deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting anime', error });
   }
+};
+
+module.exports = {
+  getAllAnime,
+  getAnimeById,
+  addAnime,
+  updateAnime,
+  deleteAnime,
 };

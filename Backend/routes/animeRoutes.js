@@ -5,7 +5,7 @@ const router = express.Router();
 
 // Anime routes
 router.get('/', animeController.getAllAnime);
-router.get('/:id', animeController.getAnimeById); // Add this line
+router.get('/:id', animeController.getAnimeById);
 router.post('/', animeController.addAnime);
 router.patch('/:id', animeController.updateAnime);
 router.delete('/:id', animeController.deleteAnime);

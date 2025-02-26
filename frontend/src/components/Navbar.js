@@ -14,34 +14,57 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
+      {/* Logo on the far left */}
       <div className="navbar-brand">
         <NavLink to="/" className="navbar-logo">
           AnimeDB
         </NavLink>
       </div>
+
+      {/* Home link in the center */}
+      <div className="navbar-home">
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive ? "navbar-link active" : "navbar-link"
+          }
+          end
+        >
+          Home
+        </NavLink>
+      </div>
+
+      {/* Auth links on the far right */}
       <ul className="navbar-links">
-        <li>
-          <NavLink to="/" className="navbar-link" activeClassName="active" exact>
-            Home
-          </NavLink>
-        </li>
         {isLoggedIn ? (
+          // If logged in, show profile and logout links
           <>
             <li>
-              <NavLink to="/profile" className="navbar-link" activeClassName="active">
+              <NavLink
+                to="/profile"
+                className={({ isActive }) =>
+                  isActive ? "navbar-link active" : "navbar-link"
+                }
+              >
                 Profile
               </NavLink>
             </li>
             <li>
-              <button onClick={handleLogout} className="navbar-button">
+              <button onClick={handleLogout} className="navbar-link">
                 Logout
               </button>
             </li>
           </>
         ) : (
+          // If not logged in, show login and signup links
           <>
             <li>
-              <NavLink to="/login" className="navbar-link" activeClassName="active">
+              <NavLink
+                to="/login"
+                className={({ isActive }) =>
+                  isActive ? "navbar-link active" : "navbar-link"
+                }
+              >
                 Login
               </NavLink>
             </li>
