@@ -1,0 +1,68 @@
+/* Navbar container */
+.navbar {
+    background-color: #221b22; /* Dark background */
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  
+  /* Brand/Logo */
+  .navbar-brand .navbar-logo {
+    color: #ffffff; /* White text */
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  /* Navbar links */
+  .navbar-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1.5rem; /* Space between links */
+  }
+  
+  /* Navbar link items */
+  .navbar-links li {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Navbar links and buttons */
+  .navbar-link,
+  .navbar-button {
+    color: #c8c6c8; /* Light gray text */
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 4px; /* Rounded corners */
+    transition: all 0.3s ease; /* Smooth transitions */
+  }
+  
+  /* Hover effect for links */
+  .navbar-link:hover {
+    color: #ffffff; /* White text on hover */
+    background-color: rgba(255, 255, 255, 0.1); /* Slight background on hover */
+  }
+  
+  /* Signup button */
+  .navbar-button {
+    background-color: #007af5; /* Blue background */
+    color: #ffffff; /* White text */
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Hover effect for buttons */
+  .navbar-button:hover {
+    background-color: #005bb5; /* Darker blue on hover */
+  }
+  
+  /* Active link styling */
+  .navbar-link.active {
+    color: #ffffff; /* White text for active link */
+    background-color: rgba(255, 255, 255, 0.1); /* Slight background for active link */
+  }
