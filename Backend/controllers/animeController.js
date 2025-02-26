@@ -72,7 +72,7 @@ const updateAnime = async (req, res) => {
       return res.status(400).json({ message: 'Invalid anime ID' });
     }
 
-    const { title, title_english, description, episodes, genre, rating, image, status, aired } = req.body;
+    const { title, title_english, description, episodes, genre, rating, image, status, aired, season, type, rank } = req.body;
 
     const updatedAnime = await Anime.findByIdAndUpdate(
       id,
@@ -86,6 +86,9 @@ const updateAnime = async (req, res) => {
         image,
         status,
         aired,
+        season,
+        type,
+        rank,
         updated_at: Date.now(), // Update the timestamp
       },
       { new: true } // Return the updated document
