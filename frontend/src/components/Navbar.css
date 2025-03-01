@@ -1,67 +1,281 @@
-/* Navbar.css */
+:root {
+  --primary-color: #6c5ce7;
+  --secondary-color: #a991f5;
+  --background: #1a1a1a;
+  --text-primary: #f8f9fa;
+  --text-secondary: #adb5bd;
+  --transition-speed: 0.3s;
+}
+
 .navbar {
-    background-color: #1e1e1e; /* Slightly lighter dark background */
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: rgba(26, 26, 26, 0.95);
+  backdrop-filter: blur(10px);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.logo-text {
+  color: var(--text-primary);
+  transition: color var(--transition-speed) ease;
+}
+
+.logo-highlight {
+  color: var(--primary-color);
+  position: relative;
+}
+
+.logo-highlight::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--secondary-color);
+  transform: scaleX(0);
+  transition: transform var(--transition-speed) ease;
+}
+
+.navbar-logo:hover .logo-highlight::after {
+  transform: scaleX(1);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-item {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  padding: 0.5rem 0;
+  transition: color var(--transition-speed) ease;
+}
+
+.nav-item.active,
+.nav-item:hover {
+  color: var(--text-primary);
+}
+
+.nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--primary-color);
+  transform: scaleX(0);
+  transition: transform var(--transition-speed) ease;
+}
+
+.nav-item.active::after,
+.nav-item:hover::after {
+  transform: scaleX(1);
+}
+
+/* Dropdown Menu */
+.nav-dropdown {
+  position: relative;
+}
+
+.dropdown-toggle {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color var(--transition-speed) ease;
+}
+
+.dropdown-toggle:hover {
+  color: var(--text-primary);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--background);
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  display: none;
+  min-width: 200px;
+}
+
+.nav-dropdown:hover .dropdown-menu {
+  display: block;
+  animation: slideDown 0.3s ease;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all var(--transition-speed) ease;
+}
+
+.dropdown-item:hover {
+  background: rgba(108, 92, 231, 0.1);
+  color: var(--text-primary);
+}
+
+/* Auth Section */
+.auth-section {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.auth-button {
+  padding: 0.5rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all var(--transition-speed) ease;
+}
+
+.auth-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+.signup-button {
+  background: var(--primary-color);
+  color: white;
+}
+
+.auth-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+}
+
+.profile-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: all var(--transition-speed) ease;
+}
+
+.profile-button:hover {
+  background: rgba(108, 92, 231, 0.2);
+}
+
+.logout-button {
+  padding: 0.5rem 1.5rem;
+  background: rgba(255, 90, 90, 0.1);
+  color: #ff5a5a;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+}
+
+.logout-button:hover {
+  background: rgba(255, 90, 90, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Mobile Menu */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.hamburger span {
+  display: block;
+  width: 25px;
+  height: 2px;
+  background: var(--text-primary);
+  margin: 5px 0;
+  transition: all var(--transition-speed) ease;
+}
+
+.hamburger.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-  
-  .navbar-brand .navbar-logo {
-    color: #ffffff; /* White text */
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-decoration: none;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .navbar-home {
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .nav-links {
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--background);
+    flex-direction: column;
+    padding: 2rem;
+    display: none;
   }
-  
-  .navbar-links {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+
+  .nav-links.active {
     display: flex;
-    gap: 1.5rem;
   }
-  
-  .navbar-links li {
-    display: flex;
-    align-items: center;
+
+  .menu-toggle {
+    display: block;
   }
-  
-  .navbar-link,
-  .navbar-button {
-    color: #c8c6c8; /* Light gray text */
-    text-decoration: none;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-    background: none;
-    border: none;
-    cursor: pointer;
+
+  .nav-dropdown .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    background: transparent;
   }
-  
-  .navbar-link:hover {
-    color: #ffffff; /* White text on hover */
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-  
-  .navbar-button {
-    background-color: #007af5; /* Bright blue for buttons */
-    color: #ffffff;
-  }
-  
-  .navbar-button:hover {
-    background-color: #005bb5; /* Darker blue on hover */
-  }
-  
-  .navbar-link.active {
-    color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.1);
-  }
+}

@@ -1,81 +1,91 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext"; // Import the AuthContext
+import { AuthContext } from "../context/AuthContext";
 import "./Navbar.css";
 
 const Navbar = () => {
-  const { isLoggedIn, logout } = useContext(AuthContext); // Get the auth state and logout function
+  const { isLoggedIn, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    logout(); // Call the logout function from AuthContext
-    navigate("/"); // Redirect to home page
+    logout();
+    navigate("/");
+    setIsMenuOpen(false);
   };
 
   return (
     <nav className="navbar">
-      {/* Logo on the far left */}
-      <div className="navbar-brand">
+      <div className="navbar-container">
+        {/* Logo */}
         <NavLink to="/" className="navbar-logo">
-          AnimeDB
+          <span className="logo-text">Anime</span>
+          <span className="logo-highlight">Nexus</span>
         </NavLink>
-      </div>
 
-      {/* Home link in the center */}
-      <div className="navbar-home">
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            isActive ? "navbar-link active" : "navbar-link"
-          }
-          end
-        >
-          Home
-        </NavLink>
-      </div>
+        {/* Main Navigation */}
+        <div className={`nav-links ${isMenuOpen ? "active" : ""}`}>
+          <NavLink 
+            to="/anime"
+            className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+          >
+            Anime
+          </NavLink>
+          <NavLink 
+            to="/manga"
+            className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+          >
+            Manga
+          </NavLink>
+          <div className="nav-dropdown">
+            <button className="dropdown-toggle">
+              Categories
+              <span className="dropdown-arrow">▼</span>
+            </button>
+            <div className="dropdown-menu">
+              <NavLink to="/genres" className="dropdown-item">Genres</NavLink>
+              <NavLink to="/seasonal" className="dropdown-item">Seasonal</NavLink>
+              <NavLink to="/top-rated" className="dropdown-item">Top Rated</NavLink>
+            </div>
+          </div>
+        </div>
 
-      {/* Auth links on the far right */}
-      <ul className="navbar-links">
-        {isLoggedIn ? (
-          // If logged in, show profile and logout links
-          <>
-            <li>
-              <NavLink
-                to="/profile"
-                className={({ isActive }) =>
-                  isActive ? "navbar-link active" : "navbar-link"
-                }
-              >
+        {/* Auth Section */}
+        <div className="auth-section">
+          {isLoggedIn ? (
+            <>
+              <NavLink to="/profile" className="profile-button">
+                <span className="profile-icon">👤</span>
                 Profile
               </NavLink>
-            </li>
-            <li>
-              <button onClick={handleLogout} className="navbar-link">
+              <button onClick={handleLogout} className="logout-button">
                 Logout
               </button>
-            </li>
-          </>
-        ) : (
-          // If not logged in, show login and signup links
-          <>
-            <li>
-              <NavLink
-                to="/login"
-                className={({ isActive }) =>
-                  isActive ? "navbar-link active" : "navbar-link"
-                }
-              >
+            </>
+          ) : (
+            <>
+              <NavLink to="/login" className="auth-button">
                 Login
               </NavLink>
-            </li>
-            <li>
-              <NavLink to="/signup" className="navbar-button">
-                Signup
+              <NavLink to="/signup" className="auth-button signup-button">
+                Sign Up
               </NavLink>
-            </li>
-          </>
-        )}
-      </ul>
+            </>
+          )}
+        </div>
+
+        {/* Mobile Menu Toggle */}
+        <button 
+          className="menu-toggle"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          <div className={`hamburger ${isMenuOpen ? "open" : ""}`}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+      </div>
     </nav>
   );
 };
