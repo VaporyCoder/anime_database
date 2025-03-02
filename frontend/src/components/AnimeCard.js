@@ -24,7 +24,7 @@ const AnimeCard = ({ anime }) => {
 
   // Handle null or undefined values
   const score = anime.score ?? 0; // Default to 0 if score is null or undefined
-  const episodes = anime.episodes ?? "N/A";
+  const episodes = anime.episodes ?? "-";
   const status = anime.status ?? "N/A";
   const type = anime.type ?? "N/A";
   const rank = anime.rank ?? "N/A";
@@ -33,59 +33,53 @@ const AnimeCard = ({ anime }) => {
   const year = anime.year ?? "N/A";
 
   return (
-    <div
-      className="anime-card"
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-    >
+    <div className="anime-card" ref={cardRef}>
       <Link to={`/anime/${anime._id}`} className="card-link">
-        <div className="card-border-highlight"></div>
-
         <div className="card-image-container">
           <img
             src={anime.images?.webp?.large_image_url || anime.image}
             alt={anime.title}
             className="card-image"
           />
-          <div className="image-gradient"></div>
-
-          {anime.score !== null && anime.score !== undefined && (
-            <div className="rating-badge">
-              ⭐ {score.toFixed(1)}
-            </div>
-          )}
+          <div className="rating-badge">
+            ⭐ {score.toFixed(1)}
+          </div>
         </div>
 
         <div className="card-content">
           <h3 className="card-title">{anime.title}</h3>
-          <div className="metadata-grid">
-            <div className="metadata-item">
-              <span className="metadata-label">Type</span>
+          
+          <div className="metadata-line">
+            <span className="metadata-item">
+              <span className="metadata-label">Type:</span> 
               <span className="metadata-value">{type}</span>
-            </div>
-            <div className="metadata-item">
-              <span className="metadata-label">Episodes</span>
+            </span>
+            <span className="metadata-divider">•</span>
+            <span className="metadata-item">
+              <span className="metadata-label">Episodes:</span> 
               <span className="metadata-value">{episodes}</span>
-            </div>
-            <div className="metadata-item">
-              <span className="metadata-label">Status</span>
-              <span className="metadata-value electric-blue">{status}</span>
-            </div>
-            <div className="metadata-item">
-              <span className="metadata-label">Rank</span>
-              <span className="metadata-value">#{rank}</span>
-            </div>
-            <div className="metadata-item">
-              <span className="metadata-label">Popularity</span>
-              <span className="metadata-value">#{popularity}</span>
-            </div>
-            {season !== null && season !== undefined && (
-              <div className="metadata-item">
-                <span className="metadata-label">Season</span>
-                <span className="metadata-value">{season} {year}</span>
-              </div>
-            )}
+            </span>
+          </div>
+
+          <div className="metadata-line">
+            <span className="metadata-item">
+              <span className="metadata-label">Status:</span> 
+              <span className={`metadata-value ${status === 'Currently Airing' ? 'live-status' : ''}`}>{status}</span>
+            </span>
+            <span className="metadata-divider">•</span>
+            <span className="metadata-item">
+              {season && (
+                <>
+                  <span className="metadata-label">Season:</span> 
+                  <span className="metadata-value">{season} {year}</span>
+                </>
+              )}
+            </span>
+          </div>
+
+          <div className="metadata-footer">
+            <span className="rank-badge">Rank #{rank}</span>
+            <span className="popularity-badge">Popularity #{popularity}</span>
           </div>
         </div>
       </Link>

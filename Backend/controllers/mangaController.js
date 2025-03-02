@@ -214,6 +214,9 @@ const searchManga = async (req, res) => {
         { title_english: { $regex: query, $options: 'i' } },
         { title_japanese: { $regex: query, $options: 'i' } }
       ]
+    }).sort({
+      score: -1, // Higher scored items first
+      popularity: 1 // More popular items first
     }).limit(10);
     
     res.json(results);

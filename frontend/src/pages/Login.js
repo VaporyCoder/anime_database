@@ -1,13 +1,13 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext"; // Import the AuthContext
+import { useAuth } from "../context/AuthContext"; // Import the AuthContext
 import "./Login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { login } = useContext(AuthContext); // Get the login function from AuthContext
+  const { login } = useAuth(); // Get the login function from AuthContext
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -24,16 +24,23 @@ const Login = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Login failed");
+        throw new Error(data.error || "Login failed");
       }
 
-      login(data.token); // Update the auth state
-      navigate("/"); // Redirect to home page
+      // Updated login call with user data
+      login(data.token, {
+        id: data.user.id,
+        username: data.user.username,
+        email: data.user.email,
+        profilePicture: data.user.profilePicture,
+        isAdmin: data.user.isAdmin
+      });
+      
+      navigate("/");
     } catch (err) {
       setError(err.message);
     }
   };
-
   return (
     <div className="login">
       <h1>Login</h1>

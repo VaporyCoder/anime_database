@@ -40,6 +40,28 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: 'https://res.cloudinary.com/dpz6ivjry/image/upload/v1681234567/default-avatar.png'
   },
+  socialLinks: {
+    website: {
+      type: String,
+      match: [/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/, 'Invalid URL']
+    },
+    twitter: {
+      type: String,
+      match: [/https?:\/\/(www\.)?x\.com\/[A-Za-z0-9_]{1,15}/, 'Invalid X URL']
+    },
+    instagram: {
+      type: String,
+      match: [/https?:\/\/(www\.)?instagram\.com\/[A-Za-z0-9_]/i, 'Invalid Instagram URL']
+    },
+    mal: {
+      type: String,
+      match: [/https?:\/\/(www\.)?myanimelist\.net\/profile\/[A-Za-z0-9_]/i, 'Invalid MyAnimeList URL']
+    },
+    anilist: {
+      type: String,
+      match: [/https?:\/\/(www\.)?anilist\.co\/user\/[A-Za-z0-9_]/i, 'Invalid AniList URL']
+    }
+  },
   createdAt: {
     type: Date,
     default: Date.now

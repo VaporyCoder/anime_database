@@ -11,28 +11,32 @@ const errorResponse = (res, status, message) => {
 
 // Signup a new user (Updated for Cloudinary)
 exports.signup = async (req, res) => {
-  const { username, email, password, phoneNumber, address } = req.body;
+  const { username, email, password, address } = req.body;
+  // Get phoneNumber if it exists
+  const phoneNumber = req.body.phoneNumber || undefined;
+
 
   try {
     // Use Cloudinary URL if file was uploaded, otherwise use default
     const profileUrl = req.file?.path || process.env.DEFAULT_AVATAR_URL;
     // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    // const salt = await bcrypt.genSalt(10);
+    // const hashedPassword = await bcrypt.hash(password, salt);
 
     const user = new User({
       username,
       email,
-      password: hashedPassword,
+      password,
       phoneNumber,
       address,
-      profilePicture: profileUrl
+      profilePicture: profileUrl,
+      socialLinks: req.body.socialLinks || {}
     });
 
     await user.save();
     
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
     
     res.status(201).json({
       success: true,
@@ -56,12 +60,12 @@ exports.login = async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-    if (!user) return errorResponse(res, 401, 'Invalid credentials');
+    if (!user) return errorResponse(res, 401, 'Email not found');
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return errorResponse(res, 401, 'Invalid credentials');
+    if (!isMatch) return errorResponse(res, 401, 'Incorrect password');
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
     
     res.json({
       success: true,
@@ -91,7 +95,8 @@ exports.getProfile = async (req, res) => {
         email: user.email,
         profilePicture: user.profilePicture,
         phoneNumber: user.phoneNumber,
-        address: user.address
+        address: user.address,
+        socialLinks: user.socialLinks
       }
     });
   } catch (err) {
@@ -133,18 +138,19 @@ exports.updateUser = async (req, res) => {
 
     // Regular user updates
     if (!req.user.isAdmin) {
-      const allowedUpdates = ['username', 'phoneNumber', 'address'];
+      const allowedUpdates = ['username', 'phoneNumber', 'address', 'socialLinks'];
       allowedUpdates.forEach(field => {
         if (req.body[field]) userToUpdate[field] = req.body[field];
       });
     } else {
       // Admin updates
-      const { username, email, phoneNumber, address, isAdmin } = req.body;
+      const { username, email, phoneNumber, address, isAdmin, socialLinks } = req.body;
       userToUpdate.username = username || userToUpdate.username;
       userToUpdate.email = email || userToUpdate.email;
       userToUpdate.phoneNumber = phoneNumber || userToUpdate.phoneNumber;
       userToUpdate.address = address || userToUpdate.address;
       userToUpdate.isAdmin = isAdmin !== undefined ? isAdmin : userToUpdate.isAdmin;
+      userToUpdate.socialLinks = socialLinks || userToUpdate.socialLinks;
     }
 
     await userToUpdate.save();
@@ -191,6 +197,7 @@ exports.adminUpdateUser = async (req, res) => {
     user.phoneNumber = phoneNumber || user.phoneNumber;
     user.address = address || user.address;
     user.isAdmin = isAdmin !== undefined ? isAdmin : user.isAdmin;
+    user.socialLinks = req.body.socialLinks || user.socialLinks;
 
     if (req.file) {
       userToUpdate.profilePicture = req.file.secure_url;

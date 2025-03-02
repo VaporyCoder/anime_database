@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext"; // Import the AuthProvider
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
+import AnimePage from "./pages/AnimePage";
 import AnimeDetails from "./pages/AnimeDetails";
 import MangaDetails from "./pages/MangaDetails";
 import Login from "./pages/Login";
@@ -21,6 +22,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/anime/:id" element={<AnimeDetails />} />
             <Route path="/manga/:id" element={<MangaDetails />} />
+            <Route path="/anime" element={<AnimePage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/profile" element={<Profile />} />

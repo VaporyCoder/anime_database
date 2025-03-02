@@ -101,7 +101,7 @@ const Home = () => {
       </h2>
       <div className="media-grid">
         {items.length > 0 ? (
-          items.slice(0, 10).map((item) => 
+          items.slice(0, 8).map((item) => 
             componentType === 'manga' ? (
               <MangaCard key={item.mal_id} manga={item} />
             ) : (

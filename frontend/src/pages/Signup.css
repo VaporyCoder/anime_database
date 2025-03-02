@@ -1,162 +1,97 @@
-/* Signup.css */
 .signup {
-  max-width: 440px;
+  max-width: 500px;
   margin: 4rem auto;
   padding: 2.5rem;
   background: var(--bg-primary);
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  transition: var(--transition);
-  position: relative;
-  overflow: hidden;
-}
-
-.signup:hover {
+  transition: transform 0.3s ease;
+  }
+  
+  .signup:hover {
   transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(108, 92, 231, 0.3);
-}
-
-.signup h1 {
+  }
+  
+  .signup h1 {
   color: var(--text-primary);
   font-size: 2rem;
   margin-bottom: 2rem;
   text-align: center;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.signup form {
+  }
+  
+  .signup form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-}
-
-.signup input {
-  width: 100%;
-  padding: 1rem;
-  background: var(--bg-secondary);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  color: var(--text-primary);
-  font-size: 0.95rem;
-  transition: var(--transition);
-}
-
-.signup input::placeholder {
-  color: var(--text-secondary);
-  opacity: 0.8;
-}
-
-.signup input:focus {
-  outline: none;
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
-}
-
-.signup .error {
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  background: rgba(255, 72, 72, 0.15);
-  color: #ff4848;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 72, 72, 0.2);
-  animation: slideIn 0.3s ease-out;
-}
-
-.signup button {
-  padding: 1rem;
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-  border: none;
-  border-radius: 8px;
-  color: var(--text-primary);
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  position: relative;
-  overflow: hidden;
-}
-
-.signup button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
-}
-
-/* Glow Effect */
-.signup::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(108, 92, 231, 0.1),
-    transparent 60%
-  );
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  opacity: 0;
-}
-
-.signup:hover::before {
-  opacity: 1;
-}
-
-.address-group {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(2, 1fr);
-}
-
-@media (max-width: 768px) {
-  .address-group {
-    grid-template-columns: 1fr;
-  }
-}
-
-input[type="tel"], input[type="url"] {
-  width: 100%;
-  padding: 1rem;
-  background: var(--bg-secondary);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  color: var(--text-primary);
-  font-size: 0.95rem;
-  transition: var(--transition);
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .signup {
-    margin: 2rem 1.5rem;
-    padding: 2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .signup {
-    padding: 1.5rem;
   }
   
-  .signup h1 {
-    font-size: 1.75rem;
+  .input-group {
+  display: grid;
+  gap: 1rem;
+  }
+  
+  .social-links-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
   }
   
   .signup input {
-    padding: 0.85rem;
+  width: 100%;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
   }
-}
+  
+  .signup input:focus {
+  outline: 2px solid var(--accent);
+  border-color: transparent;
+  }
+  
+  .signup button {
+  padding: 1rem;
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  }
+  
+  .signup button:hover {
+  opacity: 0.9;
+  }
+  
+  .error {
+  padding: 1rem;
+  background: rgba(255, 72, 72, 0.15);
+  color: #ff4848;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 72, 72, 0.2);
+  }
+  
+  @media (max-width: 768px) {
+  .signup {
+  margin: 2rem;
+  padding: 2rem;
+  }
+  
+  .social-links-group {
+  grid-template-columns: 1fr;
+  }
+  }
+  
+  @media (max-width: 480px) {
+  .signup {
+  padding: 1.5rem;
+  margin: 1.5rem;
+  }
+  
+  .signup h1 {
+  font-size: 1.75rem;
+  }
+  }

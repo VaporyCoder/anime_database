@@ -229,7 +229,7 @@ const deleteAnime = async (req, res) => {
 // Get top-rated anime (sorted by score)
 const getTopRatedAnime = async (req, res) => {
   try {
-    const topRatedAnime = await Anime.find().sort({ score: -1 }).limit(10);
+    const topRatedAnime = await Anime.find().sort({ score: -1 }).limit(8);
     res.status(200).json(topRatedAnime);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching top-rated anime', error });
@@ -250,7 +250,7 @@ const getCurrentlyAiringAnime = async (req, res) => {
       }
     })
     .sort({ popularity: 1 }) // Sort by popularity ascending (lower numbers are more popular)
-    .limit(10);
+    .limit(8);
 
     res.status(200).json(currentlyAiringAnime);
   } catch (error) {
@@ -267,12 +267,94 @@ const searchAnime = async (req, res) => {
 
   try {
     const results = await Anime.find({
-      title_english: { $regex: query, $options: 'i' }, // Case-insensitive search
-    }).limit(10); // Limit results to 10
+      $or: [
+        { title: { $regex: query, $options: 'i' } },
+        { title_english: { $regex: query, $options: 'i' } },
+        { title_japanese: { $regex: query, $options: 'i' } }
+      ]
+    }).sort({
+      score: -1, // Higher scored items first
+      popularity: 1 // More popular items first
+    }).limit(10);
+    
     res.json(results);
   } catch (error) {
     console.error('Error searching anime:', error);
     res.status(500).json({ error: 'An error occurred while searching.' });
+  }
+};
+
+// Get trending anime (most popular this season)
+const getTrendingAnime = async (req, res) => {
+  try {
+    const trendingAnime = await Anime.find({
+      season: { $regex: new Date().getFullYear().toString(), $options: 'i' }
+    })
+    .sort({ popularity: 1 })
+    .limit(8);
+    
+    res.status(200).json(trendingAnime);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching trending anime', error });
+  }
+};
+
+// Get upcoming anime
+const getUpcomingAnime = async (req, res) => {
+  try {
+    const upcomingAnime = await Anime.find({
+      status: "Not yet aired",
+      rating: { $nin: ['R+ - Mild Nudity', 'Rx - Hentai'] }
+    })
+    .sort({ popularity: 1 })
+    .limit(8);
+    
+    res.status(200).json(upcomingAnime);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching upcoming anime', error });
+  }
+};
+
+// Get anime movies
+const getAnimeMovies = async (req, res) => {
+  try {
+    const movies = await Anime.find({ type: "Movie" })
+      .sort({ score: -1 })
+      .limit(8);
+    
+    res.status(200).json(movies);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching anime movies', error });
+  }
+};
+
+// Get anime genres
+const getAnimeGenres = async (req, res) => {
+  try {
+    const genres = await Anime.aggregate([
+      { $unwind: "$genres" },
+      { $group: {
+        _id: "$genres",
+        count: { $sum: 1 },
+        animes: { $push: "$$ROOT" }
+      }},
+      { $project: {
+        genre: "$_id",
+        count: 1,
+        topAnimes: { $slice: ["$animes", 8] },
+        _id: 0
+      }}
+    ]);
+    
+    // Convert array to object with genre as key
+    const genreMap = genres.reduce((acc, curr) => {
+      acc[curr.genre] = curr.topAnimes;
+      return acc;
+    }, {});
+    
+    res.status(200).json(genreMap);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching anime genres', error });
   }
 };
 
@@ -285,4 +367,8 @@ module.exports = {
   getTopRatedAnime,
   getCurrentlyAiringAnime,
   searchAnime,
+  getTrendingAnime,
+  getUpcomingAnime,
+  getAnimeMovies,
+  getAnimeGenres
 };

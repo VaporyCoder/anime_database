@@ -6,20 +6,29 @@ const auth = async (req, res, next) => {
     const token = req.header("Authorization")?.replace("Bearer ", "");
     
     if (!token) {
-      return res.status(401).json({ message: "Access denied. No token provided." });
+      return res.status(401).json({ 
+        success: false,
+        error: "Access denied. No token provided." 
+      });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id).select("-password");
     
     if (!user) {
-      throw new Error("User not found");
+      return res.status(401).json({
+        success: false,
+        error: "User not found"
+      });
     }
 
-    req.user = user; // Attach full user document
+    req.user = user;
     next();
   } catch (err) {
-    res.status(401).json({ message: "Invalid token" });
+    res.status(401).json({
+      success: false,
+      error: "Invalid or expired token"
+    });
   }
 };
 

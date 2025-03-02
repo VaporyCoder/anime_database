@@ -81,12 +81,11 @@
 /* Anime Grid Layout */
 .media-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 2rem;
+  grid-template-columns: repeat(4, 1fr); /* 4 cards per row */
+  grid-auto-rows: minmax(180px, auto);
+  gap: 1.5rem;
   width: 100%;
-  /* overflow-x: auto; */
   padding-bottom: 1rem;
-  /* border: solid 2px white; */
 }
 
 /* Hero Section */
@@ -97,14 +96,14 @@
 }
 
 .hero-heading {
-  font-size: 3.5rem;
+  font-size: 4rem;
   font-weight: 800;
   background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   margin-bottom: 1.5rem;
-  line-height: 1.1;
+  line-height: 1.4;
 }
 
 .hero-text {
@@ -238,6 +237,9 @@
   .hero-heading {
     font-size: 2.75rem;
   }
+  .media-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
+  }
 }
 
 @media (max-width: 1024px) {
@@ -250,6 +252,9 @@
   .home {
     padding: 2rem 1rem;
     gap: 3rem;
+  }
+  .media-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 cards per row */
   }
 
   .section-title {
@@ -274,5 +279,9 @@
   .search-button {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
+  }
+
+  .media-grid {
+    grid-template-columns: 1fr;
   }
 }

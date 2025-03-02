@@ -260,8 +260,8 @@ const AnimeDetails = () => {
 
       {/* Additional Information Footer */}
       <div className="additional-info">
-        <span>Added: {new Date(anime.created_at).toLocaleDateString()}</span>
-        <span>Last updated: {new Date(anime.updated_at).toLocaleDateString()}</span>
+        <span>Added: {formatDate(anime.created_at)}</span>
+        <span>Last updated: {formatDate(anime.updated_at)}</span>
       </div>
     </div>
   );

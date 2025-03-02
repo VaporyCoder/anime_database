@@ -7,14 +7,18 @@ const router = express.Router();
 router.get('/', animeController.getAllAnime);
 router.post('/', animeController.addAnime);
 
-// New routes for home page sections
+// Section routes
+router.get('/sections/trending', animeController.getTrendingAnime);
 router.get('/sections/top-rated', animeController.getTopRatedAnime);
 router.get('/sections/currently-airing', animeController.getCurrentlyAiringAnime);
+router.get('/sections/upcoming', animeController.getUpcomingAnime);
+router.get('/sections/movies', animeController.getAnimeMovies);
+router.get('/genres', animeController.getAnimeGenres);
 
-// New route for searching anime (MUST COME BEFORE /:id)
+// Search route
 router.get('/search', animeController.searchAnime);
 
-// Route for getting anime by ID (MUST COME AFTER /search)
+// Single anime routes
 router.get('/:id', animeController.getAnimeById);
 router.patch('/:id', animeController.updateAnime);
 router.delete('/:id', animeController.deleteAnime);
